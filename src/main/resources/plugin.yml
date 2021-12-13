@@ -1,4 +1,5 @@
   name: SimpleTreeCap
   main: com.gmail.jlmerrett.SimpleTreeCap.SimpleTreeCap
   version: 1.0.0
+  api-version: 1.18
   author: OffJosh

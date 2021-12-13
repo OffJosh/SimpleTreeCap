@@ -1,9 +1,6 @@
 package com.gmail.jlmerrett.SimpleTreeCap.EventHandlers;
 
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -32,7 +29,7 @@ public class BreakBlockEventHandler implements Listener {
         GameMode gameMode = player.getGameMode();
         ItemStack heldItem = player.getInventory().getItemInMainHand();
 
-        if(isLog(material) && gameMode.equals(GameMode.SURVIVAL)){
+        if(isLog(material) && gameMode.equals(GameMode.SURVIVAL) && player.isSneaking()){
             blocksBroken = 1;
             breakJoinedLogs(block, heldItem, player);
         }
@@ -45,8 +42,7 @@ public class BreakBlockEventHandler implements Listener {
 
     private void breakJoinedLogs(Block block, ItemStack heldItem, Player player){
         //TODO held item can sometimes be null if its broken.
-        //TODO Netherite no worky
-        if(heldItem.getType().name().contains("_AXE") && blocksBroken < 16) {
+        if(heldItem.toString().contains("_AXE") && blocksBroken < 16) {
             int x = block.getX();
             int y = block.getY();
             int z = block.getZ();
