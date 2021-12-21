@@ -1,5 +1,9 @@
   name: SimpleTreeCap
   main: com.gmail.jlmerrett.SimpleTreeCap.SimpleTreeCap
-  version: 1.0.0
+  version: 1.1.1
   api-version: 1.18
   author: OffJosh
+  commands:
+    treecap:
+      description: Toggle the TreeCap plugin - will always start disabled.
+      usage: /treecap [ enable | disable ]

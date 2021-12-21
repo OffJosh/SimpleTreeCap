@@ -16,7 +16,7 @@ import java.util.Random;
 
 public class BreakBlockEventHandler implements Listener {
 
-    int blocksBroken = 0;
+    private static final String TREECAP_META = "treecap_meta";
 
     public BreakBlockEventHandler() {
     }
@@ -29,50 +29,60 @@ public class BreakBlockEventHandler implements Listener {
         GameMode gameMode = player.getGameMode();
         ItemStack heldItem = player.getInventory().getItemInMainHand();
 
-        if(isLog(material) && gameMode.equals(GameMode.SURVIVAL) && player.isSneaking()){
-            blocksBroken = 1;
+        boolean enabled = player.getMetadata(TREECAP_META).get(0).asBoolean();
+
+        if(isLog(material) && gameMode.equals(GameMode.SURVIVAL) && player.isSneaking() && enabled){
             breakJoinedLogs(block, heldItem, player);
         }
-
     }
 
     private boolean isLog(Material material) {
         return material.name().contains("LOG") || material.name().equals("CRIMSON_STEM") || material.name().equals("WARPED_STEM");
     }
+    private boolean isLeaf(Material material) {
+        return material.name().contains("_LEAVES");
+    }
 
     private void breakJoinedLogs(Block block, ItemStack heldItem, Player player){
         //TODO held item can sometimes be null if its broken.
-        if(heldItem.toString().contains("_AXE") && blocksBroken < 16) {
+        if(heldItem.toString().contains("_AXE")) {
             int x = block.getX();
             int y = block.getY();
             int z = block.getZ();
             World world = block.getWorld();
+            ArrayList<Block> potentialLogBlocks = new ArrayList<>();
+            ArrayList<Block> potentialLeafBlocks = new ArrayList<>();
 
-            Block northBlock = world.getBlockAt(x, y, z - 1);
-            Block eastBlock = world.getBlockAt(x + 1, y, z);
-            Block southBlock = world.getBlockAt(x, y, z + 1);
-            Block westBlock = world.getBlockAt(x - 1, y, z);
-            Block upBlock = world.getBlockAt(x, y + 1, z);
-            Block downBlock = world.getBlockAt(x, y - 1, z);
+            for(int i = -1; i <=1; i++){
+                for (int j = -1; j <=1; j++){
+                    for (int k = -1; k <=1; k++){
+                        potentialLogBlocks.add(world.getBlockAt(x+i, y+j, z+k));
+                    }
+                }
+            }
 
-            ArrayList<Block> blocks = new ArrayList<>();
-            blocks.add(northBlock);
-            blocks.add(eastBlock);
-            blocks.add(southBlock);
-            blocks.add(westBlock);
-            blocks.add(upBlock);
-            blocks.add(downBlock);
+            for(int i = -3; i <=3; i++){
+                for (int j = 0; j <=2; j++) {
+                    for (int k = -3; k <=3; k++) {
+                        potentialLeafBlocks.add(world.getBlockAt(x + i, y+j, z + k));
+                    }
+                }
+            }
 
-            for (Block newBlock : blocks) {
+            for (Block newBlock : potentialLogBlocks) {
                 if (isLog(newBlock.getBlockData().getMaterial())) {
                     newBlock.breakNaturally();
                     damageItem(heldItem, player);
-                    blocksBroken++;
                     breakJoinedLogs(newBlock, heldItem, player);
                 }
             }
-        }
 
+            for (Block newBlock : potentialLeafBlocks) {
+                if (isLeaf(newBlock.getBlockData().getMaterial())) {
+                    newBlock.breakNaturally();
+                }
+            }
+        }
     }
 
     private void damageItem(ItemStack heldItem, Player player){
@@ -87,8 +97,6 @@ public class BreakBlockEventHandler implements Listener {
             heldItem.setAmount(0);
             player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
         }
-
-
     }
 
     public boolean willDamage(ItemStack heldItem){
