@@ -3,8 +3,6 @@ package com.gmail.jlmerrett.SimpleTreeCap;
 import com.gmail.jlmerrett.SimpleTreeCap.EventHandlers.BreakBlockEventHandler;
 import com.gmail.jlmerrett.SimpleTreeCap.EventHandlers.Commands;
 import com.gmail.jlmerrett.SimpleTreeCap.EventHandlers.PlayerJoinEventHandler;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.Metadatable;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
