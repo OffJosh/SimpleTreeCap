@@ -37,8 +37,12 @@ public class BreakBlockEventHandler implements Listener {
     }
 
     private boolean isLog(Material material) {
+        if (material.name().contains("STRIPPED")){
+            return false;
+        }
         return material.name().contains("LOG") || material.name().equals("CRIMSON_STEM") || material.name().equals("WARPED_STEM");
     }
+
     private boolean isLeaf(Material material) {
         return material.name().contains("_LEAVES");
     }
