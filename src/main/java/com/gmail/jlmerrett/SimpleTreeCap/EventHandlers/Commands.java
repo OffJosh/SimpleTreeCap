@@ -7,6 +7,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
@@ -41,6 +42,16 @@ public class Commands implements Listener, CommandExecutor, TabCompleter {
                     commandSender.sendMessage("SimpleTreeCap is disabled.");
                     return true;
                 }
+                if (args[0].equalsIgnoreCase("query")) {
+                    boolean enabled = ((Player) commandSender).getMetadata(TREECAP_META).get(0).asBoolean();
+                    if(enabled){
+                        commandSender.sendMessage("SimpleTreeCap is enabled.");
+                    }
+                    else {
+                        commandSender.sendMessage("SimpleTreeCap is disabled.");
+                    }
+                    return true;
+                }
             }
         }
         return false;
@@ -48,6 +59,6 @@ public class Commands implements Listener, CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
-        return Arrays.asList("enable", "disable");
+        return Arrays.asList("enable", "disable", "query");
     }
 }

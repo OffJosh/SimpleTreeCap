@@ -44,7 +44,7 @@ public class BreakBlockEventHandler implements Listener {
     }
 
     private boolean isLeaf(Material material) {
-        return material.name().contains("_LEAVES");
+        return material.name().contains("_LEAVES") || material.name().contains("_WART_BLOCK") || material.name().contains("SHROOMLIGHT");
     }
 
     private void breakJoinedLogs(Block block, ItemStack heldItem, Player player){
